@@ -1,0 +1,315 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Dynamics-Guided Diffusion Model for Robot Manipulator Design</title>
+		<meta charset="utf-8" />
+		 <meta name="viewport" content="width=1000">
+		<link rel="stylesheet" href="assets/css/main.css" />
+
+		<meta property="og:url"           content="https://dgdm-robot.github.io" />
+	    <meta property="og:type"          content="website" />
+	    <meta property="og:title"         content="Dynamics-Guided Diffusion Model for Robot Manipulator Design" />
+	    <meta property="og:description"   content="We present Dynamics-Guided Diffusion Model, a data-driven framework for generating manipulator geometry designs for a given manipulation task. Instead of training different design models for each task, our approach employs a learned dynamics network shared across tasks. For a new manipulation task, we first decompose it into a collection of individual motion targets which we call target interaction profile, where each individual motion can be modeled by the shared dynamics network. The design objective constructed from the target and predicted interaction profiles provides a gradient to guide the refinement of finger geometry for the task. This refinement process is executed as a classifier-guided diffusion process, where the design objective acts as the classifier guidance. We evaluate our framework on various manipulation tasks, under the sensor-less setting using only an open-loop parallel jaw motion. Our generated designs outperform optimization-based and unguided diffusion baselines relatively by 31.5% and 45.3% on average manipulation success rate. With the ability to generate a design within 0.8 seconds, our framework could facilitate rapid design iteration and enhance the adoption of data-driven approaches for robotic mechanism design." />
+	    
+
+	</head>
+	<body id="top">
+
+
+		<!-- Main -->
+			<div id="main" style="padding-bottom:1em; padding-top: 5em; width: 60em; max-width: 70em; margin-left: auto; margin-right: auto;">
+					<section id="four">
+                        <h1 style="text-align: center; margin-bottom: 1em; color: #4e79a7; font-size: 200%">Dynamics-Guided Diffusion Model <br>for Robot Manipulator Design</h1>
+
+						<div class="row 50% uniform" style="width: 100%; color: black;">
+							<div class="2u" style="font-size: 1em; line-height: 1.5em; text-align: center; width: 25%">
+								Shift Down
+							</div>
+
+							<div class="2u" style="font-size: 1em; line-height: 1.5em; text-align: center; width: 25%">
+								Shift Right
+							</div>
+
+							<div class="2u" style="font-size: 1em; line-height: 1.5em; text-align: center; width: 25%">
+								Rotate Counterclockwise
+							</div>
+
+							<div class="2u" style="font-size: 1em; line-height: 1.5em; text-align: center; width: 25%">
+								Pose Convergence
+							</div>
+						</div>
+
+						<div class="box alt" style="margin-bottom: 0em;">
+							<div class="row 50% uniform" style="width: 100%;">
+								<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+									<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+										<source src="videos/T_down.mp4" type="video/mp4"> 
+									</video>
+								</div>
+
+								<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+									<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+										<source src="videos/T_right.mp4" type="video/mp4"> 
+									</video>
+								</div>
+
+								<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+									<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+										<source src="videos/T_counter.mp4" type="video/mp4"> 
+									</video>
+								</div>
+
+								<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+									<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+										<source src="videos/T_cvgr.mp4" type="video/mp4"> 
+									</video>
+								</div>
+							</div>
+
+							<div class="row 50% uniform" style="width: 100%">
+								<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+									<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+										<source src="videos/chair_down.mp4" type="video/mp4"> 
+									</video>
+								</div>
+
+								<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+									<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+										<source src="videos/chair_right.mp4" type="video/mp4"> 
+									</video>
+								</div>
+
+								<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+									<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+										<source src="videos/chair_counter.mp4" type="video/mp4"> 
+									</video>
+								</div>
+
+								<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+									<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+										<source src="videos/chair_cvgr.mp4" type="video/mp4"> 
+									</video>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="row 50% uniform" style="width: 100%; color: black;">
+							<div class="2u" style="font-size: 1em; line-height: 1.5em; text-align: center; width: 100%">
+								<h3>Task-specific Designs without Task-specific Training</h3>
+							</div>
+						</div>
+						<br>
+
+						<p style="color: black;">We present Dynamics-Guided Diffusion Model, a data-driven framework for generating manipulator geometry designs for a given manipulation task. Instead of training different design models for each task, our approach employs a learned dynamics network shared across tasks. For a new manipulation task, we first decompose it into a collection of individual motion targets which we call target interaction profile, where each individual motion can be modeled by the shared dynamics network. The design objective constructed from the target and predicted interaction profiles provides a gradient to guide the refinement of finger geometry for the task. This refinement process is executed as a classifier-guided diffusion process, where the design objective acts as the classifier guidance. We evaluate our framework on various manipulation tasks, under the sensor-less setting using only an open-loop parallel jaw motion. Our generated designs outperform optimization-based and unguided diffusion baselines relatively by 31.5% and 45.3% on average manipulation success rate. With the ability to generate a design within 0.8 seconds, our framework could facilitate rapid design iteration and enhance the adoption of data-driven approaches for robotic mechanism design.
+						</p>
+						
+
+						<div class="row">
+							<div class="12u$ 12u$(xsmall)" style="text-align: center;">
+								<h3>Technical Summary Video (with audio)</h3>
+								<iframe width="560" height="315" src="https://www.youtube.com/embed/cjrHlNdLWCc?si=I9o7wxs6GjWgRhUM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+							</div>
+						</div>
+					
+						<hr>
+						<h3>Results</h3>
+						<b>Pose Convergence</b>
+						<br>
+						The goal of pose convergence is to design fingers that always reorient a target object to a specified orientation when closing the gripper in parallel.
+						As you can imagine, this manipulator can be quite useful in industrial settings such as assembly lines. When objects are fed in with different poses we can automatically align them to the same pose. Then the following robot can just blindly manipulate the object.
+						<div class="row 50% uniform" style="width: 100%; margin-top: 0.2em;">
+							<div class="2u" style="font-size: 1em; line-height: 1.5em; text-align: center; width: 100%;">
+								<span class="image fit">
+									<video autoplay loop muted playsinline style="width: 90%;">
+										<source src="videos/belt2.mp4" type="video/mp4">	
+									</video>
+								</span>
+							</div>
+						</div>
+
+						<br>
+						More examples of pose convergence manipulators in the real world:
+						<div class="row 50% uniform" style="width: 100%; margin-top: 0.2em;">
+							<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+								<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+									<source src="videos/car-cvgr_VFrZyhiR.mp4" type="video/mp4"> 
+								</video>
+							</div>
+						
+							<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+								<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+									<source src="videos/heart-cvgr-1_KoSa0LEa.mp4" type="video/mp4"> 
+								</video>
+							</div>
+						
+							<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+								<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+									<source src="videos/cup-cvgr-1.mp4" type="video/mp4"> 
+								</video>
+							</div>
+						
+							<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+								<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+									<source src="videos/basket-cvgr_awWJ7hfl.mp4" type="video/mp4"> 
+								</video>
+							</div>
+						</div>
+
+						<br>
+						<b>Rotate</b>
+						<div class="row 50% uniform" style="width: 100%; color: black;">
+							<div class="2u" style="font-size: 1.0em; line-height: 1.5em; text-align: center; width: 50%">
+								Counterclockwise
+							</div>
+
+							<div class="2u" style="font-size: 1.0em; line-height: 1.5em; text-align: center; width: 50%">
+								Clockwise
+							</div>
+						</div>
+
+						<div class="row 50% uniform" style="width: 100%;">
+							<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+								<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+									<source src="videos/heart-counter_rJ0znRMm.mp4" type="video/mp4"> 
+								</video>
+							</div>
+						
+							<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+								<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+									<source src="videos/basket-counter_Pq2zWpV2.mp4" type="video/mp4"> 
+								</video>
+							</div>
+						
+							<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+								<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+									<source src="videos/t-clock-real_hp17m6e1.mp4" type="video/mp4"> 
+								</video>
+							</div>
+						
+							<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+								<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+									<source src="videos/plane-clock-1_j2xhPu8y.mp4" type="video/mp4"> 
+								</video>
+							</div>
+						</div>
+
+						<br>
+						<b>Shift Up/Down</b>
+						<div class="row 50% uniform" style="width: 100%; color: black;">
+							<div class="2u" style="font-size: 1.0em; line-height: 1.5em; text-align: center; width: 50%">
+								Up
+							</div>
+
+							<div class="2u" style="font-size: 1.0em; line-height: 1.5em; text-align: center; width: 50%">
+								Down
+							</div>
+						</div>
+
+						<div class="row 50% uniform" style="width: 100%;">
+							<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+								<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+									<source src="videos/t-up_yPnRiMw7.mp4" type="video/mp4"> 
+								</video>
+							</div>
+						
+							<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+								<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+									<source src="videos/chair-up_0uphthiB.mp4" type="video/mp4"> 
+								</video>
+							</div>
+						
+							<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+								<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+									<source src="videos/heart-down_I9VBjQxg.mp4" type="video/mp4"> 
+								</video>
+							</div>
+						
+							<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+								<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+									<source src="videos/car-down_LMML6ORm.mp4" type="video/mp4"> 
+								</video>
+							</div>
+						</div>
+
+						<br>
+						<b>Shift Left/Right</b>
+						<div class="row 50% uniform" style="width: 100%; color: black;">
+							<div class="2u" style="font-size: 1.0em; line-height: 1.5em; text-align: center; width: 50%">
+								Left
+							</div>
+
+							<div class="2u" style="font-size: 1.0em; line-height: 1.5em; text-align: center; width: 50%">
+								Right
+							</div>
+						</div>
+
+						<div class="row 50% uniform" style="width: 100%;">
+							<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+								<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+									<source src="videos/t-left_xYITwqkf.mp4" type="video/mp4"> 
+								</video>
+							</div>
+						
+							<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+								<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+									<source src="videos/car-left_hJ3Z6bbO.mp4" type="video/mp4"> 
+								</video>
+							</div>
+						
+							<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+								<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+									<source src="videos/heart-right_1CgyJbAu.mp4" type="video/mp4"> 
+								</video>
+							</div>
+						
+							<div class="2u video-container" style="position: relative; overflow: hidden; width: 25%;">
+								<video autoplay loop muted playsinline style="width: 200px; height: 280px; object-fit: cover;">
+									<source src="videos/basket-right.mp4" type="video/mp4"> 
+								</video>
+							</div>
+						</div>
+
+						<h3 style="margin-top: 0.8em;">Multi-object Results</h3>
+						Our framework also allows designing manipulators for a set of objects to achieve a task.
+						<br>
+						<b>Rotate Clockwise</b>
+						<div class="row 50% uniform" style="width: 100%;">
+							<div class="2u" style="font-size: 1em; line-height: 1.5em; text-align: center; width: 33.3%;">
+								<span class="image fit">
+									<video autoplay loop muted playsinline style="width: 100%; margin-right: 5%;">
+										<source src="videos/multi_clock/T.mp4" type="video/mp4">	
+									</video>
+								</span>
+							</div>
+
+							<div class="2u" style="font-size: 1em; line-height: 1.5em; text-align: center; width: 33.3%;">
+								<span class="image fit">
+									<video autoplay loop muted playsinline style="width: 100%; margin-right: 5%;">
+										<source src="videos/multi_clock/car.mp4" type="video/mp4">
+									</video>
+								</span>
+							</div>
+
+							<div class="2u" style="font-size: 1em; line-height: 1.5em; text-align: center; width: 33.3%;">
+								<span class="image fit">
+									<video autoplay loop muted playsinline style="width: 100%; margin-right: 5%;">
+										<source src="videos/multi_clock/house.mp4" type="video/mp4">	
+									</video>
+								</span>
+							</div>
+						</div>
+						
+					</section>
+
+					
+			</div>
+
+			<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.poptrox.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+	</body>
+</html>
