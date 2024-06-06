@@ -1,14 +1,14 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>Dynamics-Guided Diffusion Model for Robot Manipulator Design</title>
+		<title>Dynamics-Guided Diffusion Model for Sensor-less Robot Manipulator Design</title>
 		<meta charset="utf-8" />
 		 <meta name="viewport" content="width=1000">
 		<link rel="stylesheet" href="assets/css/main.css" />
 
-		<meta property="og:url"           content="https://dgdm-robot.github.io" />
+		<meta property="og:url"           content="https://dgdmcorl.github.io" />
 	    <meta property="og:type"          content="website" />
-	    <meta property="og:title"         content="Dynamics-Guided Diffusion Model for Robot Manipulator Design" />
+	    <meta property="og:title"         content="Dynamics-Guided Diffusion Model for Sensor-less Robot Manipulator Design" />
 	    <meta property="og:description"   content="We present Dynamics-Guided Diffusion Model, a data-driven framework for generating manipulator geometry designs for a given manipulation task. Instead of training different design models for each task, our approach employs a learned dynamics network shared across tasks. For a new manipulation task, we first decompose it into a collection of individual motion targets which we call target interaction profile, where each individual motion can be modeled by the shared dynamics network. The design objective constructed from the target and predicted interaction profiles provides a gradient to guide the refinement of finger geometry for the task. This refinement process is executed as a classifier-guided diffusion process, where the design objective acts as the classifier guidance. We evaluate our framework on various manipulation tasks, under the sensor-less setting using only an open-loop parallel jaw motion. Our generated designs outperform optimization-based and unguided diffusion baselines relatively by 31.5% and 45.3% on average manipulation success rate. With the ability to generate a design within 0.8 seconds, our framework could facilitate rapid design iteration and enhance the adoption of data-driven approaches for robotic mechanism design." />
 	    
 
@@ -19,7 +19,7 @@
 		<!-- Main -->
 			<div id="main" style="padding-bottom:1em; padding-top: 5em; width: 60em; max-width: 70em; margin-left: auto; margin-right: auto;">
 					<section id="four">
-                        <h1 style="text-align: center; margin-bottom: 1em; color: #4e79a7; font-size: 200%">Dynamics-Guided Diffusion Model <br>for Robot Manipulator Design</h1>
+                        <h1 style="text-align: center; margin-bottom: 1em; color: #4e79a7; font-size: 200%">Dynamics-Guided Diffusion Model <br>for Sensor-less Robot Manipulator Design</h1>
 
 						<div class="row 50% uniform" style="width: 100%; color: black;">
 							<div class="2u" style="font-size: 1em; line-height: 1.5em; text-align: center; width: 25%">
@@ -101,7 +101,7 @@
 						</div>
 						<br>
 
-						<p style="color: black;">We present Dynamics-Guided Diffusion Model, a data-driven framework for generating manipulator geometry designs for a given manipulation task. Instead of training different design models for each task, our approach employs a learned dynamics network shared across tasks. For a new manipulation task, we first decompose it into a collection of individual motion targets which we call target interaction profile, where each individual motion can be modeled by the shared dynamics network. The design objective constructed from the target and predicted interaction profiles provides a gradient to guide the refinement of finger geometry for the task. This refinement process is executed as a classifier-guided diffusion process, where the design objective acts as the classifier guidance. We evaluate our framework on various manipulation tasks, under the sensor-less setting using only an open-loop parallel jaw motion. Our generated designs outperform optimization-based and unguided diffusion baselines relatively by 31.5% and 45.3% on average manipulation success rate. With the ability to generate a design within 0.8 seconds, our framework could facilitate rapid design iteration and enhance the adoption of data-driven approaches for robotic mechanism design.
+						<p style="color: black;">We present Dynamics-Guided Diffusion Model (DGDM), a data-driven framework for generating task-specific manipulator designs without task-specific training. Given object shapes and task specifications, DGDM generates sensor-less manipulator designs that can blindly manipulate objects towards desired motions and poses using an open-loop parallel motion. This framework 1) flexibly represents manipulation tasks as interaction profiles, 2) represents the design space using a geometric diffusion model, and 3) efficiently searches this design space using the gradients provided by a dynamics network trained without any task information. We evaluate DGDM on various manipulation tasks ranging from shifting/rotating objects to converging objects to a specific pose. Our generated designs outperform optimization-based and unguided diffusion baselines relatively by 31.5% and 45.3% on average success rate. With the ability to generate a new design within 0.8s, DGDM facilitates rapid design iteration and enhances the adoption of data-driven approaches for robot mechanism design.
 						</p>
 						
 
